@@ -3,6 +3,7 @@ import sys
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
@@ -10,6 +11,9 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
 
+# https://scikit-learn.org/stable/getting_started.html
+# https://www.youtube.com/watchcmqM&t=348s
+# https://plotly.com/python/multiple-axes
 def main():
     # Loading the Dataset
     df = pd.read_csv(
@@ -29,26 +33,50 @@ def main():
     print("75% Quantile of the Iris dataset is:", np.quantile(arr, q=0.75, axis=0))
     # Data Visualization
     Iris_fig = px.scatter(
-        df, x="Sepal Width", y="Sepal Length", color="Class", symbol="Class"
+        df,
+        x="Sepal Width",
+        y="Sepal Length",
+        color="Class",
+        symbol="Class",
+        title="Sepal Width vs Sepal Length wrt to Species",
     )
-    Iris_fig.show()
+    Iris_fig.write_html(file="viz_plots.html", include_plotlyjs="cdn")
 
-    Iris_fig2 = px.histogram(df, x="Petal Width", nbins=20, color="Class")
+    Iris_fig2 = px.histogram(
+        df,
+        x="Petal Width",
+        nbins=20,
+        color="Class",
+        title="Petal Width vs Class/Species",
+    )
     Iris_fig2.update_layout(bargap=0.25)
-    Iris_fig2.show()
+    Iris_fig2.write_html(file="viz_plots.html", include_plotlyjs="cdn")
 
     Iris_fig3 = px.violin(
-        df, y="Sepal Length", color="Class", violinmode="overlay", hover_data=df.columns
+        df,
+        y="Sepal Length",
+        color="Class",
+        violinmode="overlay",
+        hover_data=df.columns,
+        title="Sepal Length vs Class/Species",
     )
-    Iris_fig3.show()
+    Iris_fig3.write_html(file="viz_plots.html", include_plotlyjs="cdn")
 
-    Iris_fig4 = px.bar(df, y="Class", color="Petal Length")
-    Iris_fig4.show()
+    Iris_fig4 = px.bar(
+        df, y="Class", color="Petal Length", title="Petal length vs Class/Species"
+    )
+    Iris_fig4.write_html(file="viz_plots.html", include_plotlyjs="cdn")
 
     Iris_fig5 = px.box(
-        df, x="Class", y="Petal Length", points="all", notched=True, color="Class"
+        df,
+        x="Class",
+        y="Petal Length",
+        points="all",
+        notched=True,
+        color="Class",
+        title="Petal Length vs Class/Species",
     )
-    Iris_fig5.show()
+    Iris_fig5.write_html(file="viz_plots.html", include_plotlyjs="cdn")
 
     # Standard Transformations
     X_transform = df[
@@ -100,6 +128,85 @@ def main():
     print("Pipeline 1 score", pipeline.score(X, Y_transform))
     print("Pipeline 2 score", pipeline2.score(X, Y_transform))
     print("Pipeline 3 score", pipeline3.score(X, Y_transform))
+
+
+# Response Plots
+df = pd.read_csv(
+    "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data",
+    names=["Sepal Length", "Sepal Width", "Petal Length", "Petal Width", "Class"],
+)
+types = ["Iris-versicolor", "Iris-setosa", "Iris-virginica"]
+col = ["Sepal Length", "Sepal Width", "Petal Length", "Petal Width"]
+
+for type in types:
+    for i in col:
+        iris_response = df[[i, "Class"]]
+
+        a = np.array(iris_response[i])
+        population, bins = np.histogram(a, bins=10, range=(np.min(a), np.max(a)))
+        bins_mod = 0.5 * (bins[:-1] + bins[1:])
+
+        sl_iris = iris_response.loc[iris_response["Class"] == type]
+        b = np.array(sl_iris[i])
+        population_Iris, _ = np.histogram(b, bins=bins)
+
+        p_response = population_Iris / population
+
+        response_rate = len(df.loc[df["Class"] == type]) / len(df)
+        response_rate_arr = np.array([response_rate] * len(bins_mod))
+
+        print(response_rate_arr)
+
+        fig = go.Figure(
+            data=go.Bar(
+                x=bins_mod,
+                y=population,
+                name=i,
+                marker=dict(color=" skyblue"),
+            )
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=bins_mod,
+                y=p_response,
+                yaxis="y2",
+                name="Response",
+                marker=dict(color="red"),
+            )
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=bins_mod,
+                y=response_rate_arr,
+                yaxis="y2",
+                mode="lines",
+                name=f"Species {type}",
+            )
+        )
+
+        fig.update_layout(
+            title_text=f"{type} vs {i} Mean of Response Rate Plot",
+            legend=dict(orientation="v"),
+            yaxis=dict(
+                title=dict(text="Total Population"),
+                side="left",
+                range=[0, 30],
+            ),
+            yaxis2=dict(
+                title=dict(text="Response"),
+                side="right",
+                range=[-0.1, 1.2],
+                overlaying="y",
+                tickmode="auto",
+            ),
+        )
+
+        # Set x-axis title
+        fig.update_xaxes(title_text="Predictor Bins")
+
+        fig.write_html(file="viz_plots.html", include_plotlyjs="cdn")
 
 
 if __name__ == "__main__":
