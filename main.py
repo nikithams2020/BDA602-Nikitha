@@ -14,6 +14,7 @@ from sklearn.svm import SVC
 # https://scikit-learn.org/stable/getting_started.html
 # https://www.youtube.com/watchcmqM&t=348s
 # https://plotly.com/python/multiple-axes
+# I have used youtube and the libraries documentation as references
 def main():
     # Loading the Dataset
     df = pd.read_csv(
