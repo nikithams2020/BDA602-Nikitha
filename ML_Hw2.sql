@@ -36,7 +36,7 @@ create table if not exists hist_bat_avg as (
 		bc.batter)
 ;
 
--- Rolling Average
+-- Rolling Average of batters
 create table if not exists rolling_avg as (
 	with temp_1 as (
 		select
