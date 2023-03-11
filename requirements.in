@@ -1,4 +1,6 @@
 numpy
 pandas
-ploty
+plotly
 scipy
+mariadb
+pyspark
