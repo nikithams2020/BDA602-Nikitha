@@ -5,3 +5,4 @@ scipy
 mariadb
 pyspark
 statsmodels
+seaborn
