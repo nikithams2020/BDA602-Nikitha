@@ -38,7 +38,7 @@ class TestDatasets:
 
         :param:
         data_set_name : string, optional
-            Data set to load
+            Data set to load.
 
         :return:
         data_set : :class:`pandas.DataFrame`
