@@ -150,7 +150,7 @@ def cat_cont_res(df, pred_var, response):
     ]
 
     # res = data_response.loc[data_response[response] == 1]
-    # b = np.array(res[response])
+    # b = np.array(res[response])..
     population_b = data_response[pred_var].value_counts()
 
     p_response = population_b / population_a
