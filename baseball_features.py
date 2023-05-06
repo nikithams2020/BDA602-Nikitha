@@ -465,7 +465,8 @@ def main(logger):
 
     query = """ SELECT * FROM baseball_features  """
 
-    df = pd.read_sql(query, con=sql_engine)
+    df = pd.read_sql(query,con=sql_engine)
+
 
     df.fillna(0, inplace=True)
     predictor = list(df.columns)
