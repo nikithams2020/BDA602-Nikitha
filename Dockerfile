@@ -2,7 +2,7 @@ FROM python:3.9
 
 COPY ./application/ /application/
 
-WORKDIR /application
+WORKDIR /application/
 
 RUN apt-get update && apt-get install -y gcc wget \
      mariadb-client 
