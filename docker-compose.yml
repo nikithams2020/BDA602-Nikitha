@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+
+  baseball:
+    build: .
+    container_name: game
+    depends_on:
+      - mariadb101
+    volumes:
+      - ./application/app_data/:/application/app_data/
+      - ./application/data/:/application/data/
+    ports:
+      - 8081:8080
+    restart: always
+
+
+  mariadb101:
+    image: mariadb:latest
+    container_name: mariadb_BDA
+    restart: unless-stopped
+    volumes:
+      - ./data/db_conf/:/config/
+      - ./data/db_data/:/var/lib/mysql/
+
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3309:3306"
+
