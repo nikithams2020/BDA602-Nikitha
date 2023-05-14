@@ -279,7 +279,7 @@ def continuous_continuous_pairs(df, cont_var):
         ax=ax,
     )
     s = s.get_figure()
-    s.savefig("Continuous_VS_Continuous_correlation_matrix.png")
+    s.savefig("./app_data/Continuous_VS_Continuous_correlation_matrix.png")
 
     col_tracker = set()
 
@@ -607,7 +607,7 @@ def main(logger):
     cont_temp_table.rename(columns={"predictor": "Feature"}, inplace=True)
     create_table(
         cont_temp_table,
-        "cont_plot.html",
+        "./app_data/cont_plot.html",
         click1,
         sort_by="Random Forest Variable Importance",
     )
@@ -641,7 +641,7 @@ def main(logger):
         click2 = ["Plot", "Mean of Response Plot"]
         create_table(
             second_table,
-            "cat_plot.html",
+            "./app_data/cat_plot.html",
             click2,
             sort_by="Diff Mean Response (Weighted)",
         )
@@ -651,7 +651,7 @@ def main(logger):
         columns={"file_links": "cont_1_url", "links": "cont_2_url"}, inplace=True
     )
     click4 = ["cont_1_url", "cont_2_url"]
-    create_table(pearson_corr, "pearson_corr.html", click4, sort_by="corr")
+    create_table(pearson_corr, "./app_data/pearson_corr.html", click4, sort_by="corr")
 
     del temp_df
 
@@ -764,7 +764,7 @@ def main(logger):
                 ).reset_index(drop=True)
     create_table(
         cont_cont_brute_force_table_temp,
-        "brute_force_cont_cont.html",
+        "./app_data/brute_force_cont_cont.html",
         ["link"],
         sort_by="pearson",
     )
