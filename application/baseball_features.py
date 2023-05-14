@@ -511,11 +511,13 @@ def final_model(df):
     display = RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc,
                                     estimator_name='example estimator')
     display.plot()
+    plt.savefig("./app_data/roc.jpg")
     from sklearn.metrics import precision_recall_curve
     from sklearn.metrics import PrecisionRecallDisplay
 
     prec, recall, _ = precision_recall_curve(y_test, rf_clf_top.predict(x_test), pos_label=rf_clf_top.classes_[1])
     pr_display = PrecisionRecallDisplay(precision=prec, recall=recall).plot()
+    plt.savefig('./app_data/Prec_recall.jpg')
     plt.show()
     return top_feat
 
