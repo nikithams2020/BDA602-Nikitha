@@ -150,7 +150,7 @@ def plotting_cont(df, pred_var, response):
 
     # Set x-axis title
     fig.update_xaxes(title_text="Predictor Bins")
-    filename = f"{pred_var}_cont_res.html"
+    filename = f"./app_data/{pred_var}_cont_res.html"
     fig.write_html(file=filename, include_plotlyjs="cdn")
     table.loc[len(table)] = [pred_var, filename]
     return table
@@ -225,7 +225,7 @@ def cat_cont_res(df, pred_var, response):
 
     # Set x-axis title
     fig.update_xaxes(title_text="Predictor Bins")
-    filename = f"{pred_var}_cat_res.html"
+    filename = f"./app_data/{pred_var}_cat_res.html"
     fig.write_html(file=filename, include_plotlyjs="cdn")
     table.loc[len(table)] = [pred_var, filename]
     return table
@@ -240,7 +240,7 @@ def DisplayTableTemplate(df, pred_var, response, is_cont=False):
             yaxis_title=f"{response} ({pred_var})",
             xaxis_title=f"Groupings (hometeamwinning)",
         )
-        filename = f"{pred_var}_cont_base.html"
+        filename = f"./app_data/{pred_var}_cont_base.html"
     else:
         df1 = df.groupby([pred_var, response]).count().iloc[:, 1].reset_index()
         fig = go.Figure(
@@ -260,7 +260,7 @@ def DisplayTableTemplate(df, pred_var, response, is_cont=False):
             yaxis_title=f"pred_var",
             xaxis_title=f"Groupings (survived)",
         )
-        filename = f"{pred_var}_cat_base.html"
+        filename = f"./app_data/{pred_var}_cat_base.html"
     fig.write_html(file=filename, include_plotlyjs="cdn")
 
     table.loc[len(table)] = [pred_var, filename]
@@ -744,7 +744,7 @@ def main(logger):
                     yaxis_title=c2 + " bins",
                 )
 
-                filename = f"{c1}_{c2}_brute_force.html"
+                filename = f"./app_data/{c1}_{c2}_brute_force.html"
 
                 fig.write_html(file=filename, include_plotlyjs="cdn")
 
@@ -756,7 +756,7 @@ def main(logger):
                     weigh_diff,
                     corr,
                     abs(corr),
-                    os.getcwd() + "/" + filename,
+                    os.getcwd()  + filename[1:0],
                 ]
                 cont_cont_brute_force_table_temp = pd.concat(
                     [cont_cont_brute_force_table_temp, cont_cont_brute_force_table],
